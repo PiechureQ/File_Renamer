@@ -24,13 +24,31 @@ public class MainController {
     private RenamerUtilities rUtilities = new RenamerUtilities();
     HashMap files = new HashMap();
 
+    //funkcje napisane przeze mnie
+    void updateListViewAll(){
+        for (int x = 0; x < files.size(); x++ ) {
+            String name = (String) files.keySet().toArray()[x];
+            list.fireEvent(new ListView.EditEvent<>(list, ListView.editCommitEvent(), name, x));
+        }
+    }
+
+    void updateListView(HashMap value, String clicked, int index){
+        String keyString = (String) value.keySet().toArray()[0];//nowa nazwa do listy
+
+        list.fireEvent(new ListView.EditEvent<>(list, ListView.editCommitEvent(), keyString, index));
+        files.putAll(value);//dodaje nowy klucz do mapy z nowa nazwa
+
+        files.remove(clicked);//usuwa juz nieuzywany klucz
+    }
+
+    //metody kontrolera
     public void initialize(){
         defButton.setDefaultButton(true);
         //
-        task.setItems(FXCollections.observableList(Arrays.asList("Renamer", "Add to name", "Remove from name")));
+        task.setItems(FXCollections.observableList(Arrays.asList("Rename", "Add to name", "Remove from name")));
         task.getSelectionModel().select(0);
         //
-        option.setItems(FXCollections.observableList(Arrays.asList("Apply to selected", "Apply to all")));
+        option.setItems(FXCollections.observableList(Arrays.asList("Apply to selected", "Apply to all", "Rename with order")));
         option.getSelectionModel().select(0);
         //
         list.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -78,70 +96,54 @@ public class MainController {
         files.clear();
     }
 
-    public void doClicked(ActionEvent actionEvent) {//TODO obsługa wielu wybranych , obsluga wszystkich
-        if (option.getSelectionModel().getSelectedIndex() == 0) {
+    public void doClicked(ActionEvent actionEvent) {
 
-            if (!input.getText().isEmpty()) {
-                HashMap newName;
-                String keyString;
-                String assist = list.getSelectionModel().getSelectedItems().toString();
-                int index = list.getSelectionModel().getSelectedIndex();
-                assist = assist.substring(1, assist.length() - 1);
+        switch (option.getSelectionModel().getSelectedIndex()) {
+            case 0:
+                if (!input.getText().isEmpty()) {
+                    HashMap newName;
 
-                switch (task.getSelectionModel().getSelectedIndex()) {
-                    case 0:
-                        if (!assist.contains(input.getText())) {//sprawdza czy nazwa jest zbieżna z nową jeśli tak to nic nie robi
-                            newName = renamer.rename((File) files.get(assist), input.getText()); //zwraca HashMap key to nazwa do wysietlenia i value to File
-                            keyString = (String) newName.keySet().toArray()[0];//nowa nazwa do listy
+                    String clicked = list.getSelectionModel().getSelectedItems().toString();
+                    clicked = clicked.substring(1, clicked.length() - 1);
+                    int index = list.getSelectionModel().getSelectedIndex();
 
-                            System.out.println(keyString);
+                    switch (task.getSelectionModel().getSelectedIndex()) {
+                        case 0:
+                            if (!clicked.contains(input.getText())) {//sprawdza czy nazwa jest zbieżna z nową jeśli tak to nic nie robi
+                                newName = renamer.rename((File) files.get(clicked), input.getText()); //zwraca HashMap key to nazwa do wysietlenia i value to File
 
-                            list.fireEvent(new ListView.EditEvent<>(list, ListView.editCommitEvent(), keyString, index));
-                            files.put(keyString, newName.get(keyString));//dodaje nowy klucz do mapy z nowa nazwa
-                            if (files.get(assist).equals(keyString))
-                                files.remove(assist);//usuwa juz nieuzywany klucz
-                        }
-                        break;
-                    case 1:
-                        if (!assist.contains(input.getText())) {//same^
-                            newName = renamer.addName((File) files.get(assist), input.getText());
-                            keyString = (String) newName.keySet().toArray()[0];
+                                updateListView(newName, clicked, index);
+                            }
+                            break;
+                        case 1:
+                            if (!clicked.contains(input.getText())) {//same^
+                                newName = renamer.addName((File) files.get(clicked), input.getText());
 
-                            System.out.println(keyString);
+                                updateListView(newName, clicked, index);
+                            }
+                            break;
+                        case 2:
+                            if (clicked.contains(input.getText())) {//odwrotnie jeśli zawiera zazwa to co sie wpisze to wtedy tylko robi
+                                newName = renamer.takeName((File) files.get(clicked), input.getText());
 
-                            list.fireEvent(new ListView.EditEvent<>(list, ListView.editCommitEvent(), keyString, index));
-                            files.put(keyString, newName.get(keyString));
-                            if (files.get(assist).equals(keyString))
-                                files.remove(assist);
-                        }
-                        break;
-                    case 2:
-                        if (assist.contains(input.getText())) {//odwrotnie jeśli zawiera zazwa to co sie wpisze to wtedy tylko robi
-                            newName = renamer.takeName((File) files.get(assist), input.getText());
-                            keyString = (String) newName.keySet().toArray()[0];
-
-                            System.out.println(keyString);
-
-                            list.fireEvent(new ListView.EditEvent<>(list, ListView.editCommitEvent(), keyString, index));
-                            files.put(keyString, newName.get(keyString));
-                            if (files.get(assist).equals(keyString))
-                                files.remove(assist);
-                        }
-                        break;
+                                updateListView(newName, clicked, index);
+                            }
+                            break;
+                    }
                 }
-            }
-        }
-
-
-        if(option.getSelectionModel().getSelectedIndex() == 1){
-
-            files = rUtilities.applyToAll(files, input.getText());
-
-            for (int x = 0; x < files.size(); x++ ) {
-                String name = (String) files.keySet().toArray()[x];
-                list.fireEvent(new ListView.EditEvent<>(list, ListView.editCommitEvent(), name, x));
-            }
-
+                break;
+            case 1:
+                if (!input.getText().isEmpty()) {
+                    files = rUtilities.applyToAll(files, input.getText());//zmienia nazwe wszystkich
+                    updateListViewAll();
+                }
+                break;
+            case 2:
+                if (!input.getText().isEmpty()) {
+                    files = rUtilities.renameOrdered(files, input.getText());//zmienia nazwe i przypisuje cyfry
+                    updateListViewAll();
+                }
+                break;
         }
     }
 }

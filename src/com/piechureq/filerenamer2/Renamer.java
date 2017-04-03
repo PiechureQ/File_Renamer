@@ -4,10 +4,26 @@ import java.io.File;
 import java.util.HashMap;
 
 /**
- * Created by xmichalx on 2017-03-13.
+ * Created on 2017-03-13.
  */
 public class Renamer {
     public static File name;
+
+    public String getExt(File target){
+        String targetPath = target.getPath();
+
+        String ext = targetPath.substring(targetPath.lastIndexOf('.') + 1);
+
+        return ext;
+    }
+
+    public String getPath(File target){
+        String targetPath = target.getPath();
+
+        String path = targetPath.substring(0, targetPath.lastIndexOf('\\') + 1);
+
+        return path;
+    }
 
     public HashMap<String, File> rename(File target, String newName) {
         String targetPath = target.getPath();//cale
