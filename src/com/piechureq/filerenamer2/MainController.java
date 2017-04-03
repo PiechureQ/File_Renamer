@@ -59,34 +59,31 @@ public class MainController {
     public void addClicked(ActionEvent actionEvent) {
         Window w = root.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
-        //fileChooser.setInitialDirectory();
-
-        //try catch? blad przy anulowniu
 
         List<File> selectedFiles = fileChooser.showOpenMultipleDialog(w);
+
+        ObservableList<String> items = list.getItems();
+
         String[] strings = new String[selectedFiles.size()];
         for (File file : selectedFiles) {//HashMap, każdym elementem z listy ma przypisany File do zmiany nazwy
             strings[selectedFiles.indexOf(file)] = new String();
             strings[selectedFiles.indexOf(file)] = file.getName();
-            files.put(strings[selectedFiles.indexOf((file))], file);
+            String name = strings[selectedFiles.indexOf((file))];
+            files.put(name, file);
+
+            items.add(name);
         }
-        List<String> selectedFilesS = Arrays.asList(strings);
-        ObservableList<String> items = list.getItems();
-        ObservableList<String> newItems = FXCollections.observableList(selectedFilesS);
-        items.addAll(newItems);
+
         list.setItems(items);
     }
 
     public void removeClicked(ActionEvent actionEvent) { //usuwa element z listy
         if (!list.getSelectionModel().getSelectedItems().isEmpty()) {
-            ObservableList<String> items = FXCollections.observableList(list.getItems());
             int index = list.getSelectionModel().getSelectedIndex();
-            String mapElem = items.get(index);
-            items.remove(index);
-            list.setItems(items);
 
-            //usuwa z hashmapy
-            files.remove(mapElem);
+            String removeThis = list.getItems().remove(index);
+
+            files.remove(removeThis);
         }
     }
 
@@ -111,21 +108,18 @@ public class MainController {
                         case 0:
                             if (!clicked.contains(input.getText())) {//sprawdza czy nazwa jest zbieżna z nową jeśli tak to nic nie robi
                                 newName = renamer.rename((File) files.get(clicked), input.getText()); //zwraca HashMap key to nazwa do wysietlenia i value to File
-
                                 updateListView(newName, clicked, index);
                             }
                             break;
                         case 1:
                             if (!clicked.contains(input.getText())) {//same^
                                 newName = renamer.addName((File) files.get(clicked), input.getText());
-
                                 updateListView(newName, clicked, index);
                             }
                             break;
                         case 2:
                             if (clicked.contains(input.getText())) {//odwrotnie jeśli zawiera zazwa to co sie wpisze to wtedy tylko robi
                                 newName = renamer.takeName((File) files.get(clicked), input.getText());
-
                                 updateListView(newName, clicked, index);
                             }
                             break;
