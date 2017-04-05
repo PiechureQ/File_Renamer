@@ -15,7 +15,7 @@ import java.util.*;
 public class MainController {
     @FXML private GridPane root;
     @FXML private ListView<String> list;
-    @FXML private ComboBox<String> task;
+    @FXML private ComboBox<String> task; //choise box
     @FXML private TextField input;
     @FXML private ChoiceBox<String> option;
     @FXML private Button defButton;
