@@ -6,10 +6,9 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="update renamer utility">
+    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="update renamer utility, new artifact">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/File Renamer 2/com/piechureq/filerenamer2/RenamerUtilities.class" afterPath="$PROJECT_DIR$/out/production/File Renamer 2/com/piechureq/filerenamer2/RenamerUtilities.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/piechureq/filerenamer2/MainController.java" afterPath="$PROJECT_DIR$/src/com/piechureq/filerenamer2/MainController.java" />
     </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -555,7 +554,14 @@
       <option name="project" value="LOCAL" />
       <updated>1491415705630</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="update renamer utility, new artifact">
+      <created>1491416383465</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1491416383465</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -572,7 +578,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1456" height="876" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293011" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -621,7 +627,8 @@
     <MESSAGE value="updateListView, odchudzony kod" />
     <MESSAGE value="Odchudzony kod w kontrolerze." />
     <MESSAGE value="update renamer utility" />
-    <option name="LAST_COMMIT_MESSAGE" value="update renamer utility" />
+    <MESSAGE value="update renamer utility, new artifact" />
+    <option name="LAST_COMMIT_MESSAGE" value="update renamer utility, new artifact" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
