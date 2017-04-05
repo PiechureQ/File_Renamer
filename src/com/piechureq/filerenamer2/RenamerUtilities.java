@@ -1,7 +1,6 @@
 package com.piechureq.filerenamer2;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -10,11 +9,9 @@ import java.util.*;
 public class RenamerUtilities {
     private Renamer renamer = new Renamer();
 
-    //metoda apply to all
-    HashMap<String, File> applyToAll(HashMap<String, File> files, String content){
+    HashMap<String, File> renameAll(HashMap<String, File> files, String content){//zmienia nazwe wszytkich
 
         Collection<File> fileCollection = files.values();
-
         Iterator<File> fileIterator = fileCollection.iterator();
 
         HashMap<String, File> filesOut = new HashMap<>();
@@ -26,7 +23,7 @@ public class RenamerUtilities {
         while (fileIterator.hasNext()){
             File file = fileIterator.next();
 
-            HashMap<String, File> tempMap = new HashMap<>();
+            HashMap<String, File> tempMap;
 
             if (extList.contains(renamer.getExt(file))){//sprawdza czy pliki o tym samym rozszerzeniu sie powtorzyły
                 i++;
@@ -37,19 +34,14 @@ public class RenamerUtilities {
             }
 
             filesOut.putAll(tempMap);
-            System.out.println("Nowa nazwa   " + tempMap.toString());
         }
 
         return filesOut;
     }
 
-
-
-    //metoda renameOrdered
     HashMap<String, File> renameOrdered(HashMap<String, File> files, String content){//zmienia nazwe plików na nowa podana + cyfre dla numeracji
 
         Collection<File> fileCollection = files.values();
-
         Iterator<File> fileIterator = fileCollection.iterator();
 
         HashMap<String, File> filesOut = new HashMap<>();
@@ -61,8 +53,6 @@ public class RenamerUtilities {
 
             i++;
 
-            System.out.println();
-
             HashMap<String, File> tempMap = renamer.rename(file, content + " (" + i + ")");
 
             filesOut.putAll(tempMap);
@@ -71,17 +61,63 @@ public class RenamerUtilities {
         return filesOut;
     }
 
+    HashMap<String, File> addToAll(HashMap<String, File> files, String content){//dodaje do wszystkich nazw
 
+        Collection<File> fileCollection = files.values();
+        Iterator<File> fileIterator = fileCollection.iterator();
 
-    //TODO metoda addOrder
+        HashMap<String, File> filesOut = new HashMap<>();
 
+        while (fileIterator.hasNext()){
+            File file = fileIterator.next();
 
+            HashMap<String, File> tempMap = renamer.addName(file, content);
 
+            filesOut.putAll(tempMap);
+        }
 
-    //TODO metoda renameFromMask
+        return filesOut;
+    }
 
+    HashMap<String, File> addOrder(HashMap<String, File> files){//dodale cyferki do kazdej nazwy
 
+        Collection<File> fileCollection = files.values();
+        Iterator<File> fileIterator = fileCollection.iterator();
 
+        HashMap<String, File> filesOut = new HashMap<>();
 
-    //TODO metoda addFromMask
+        int i = 0;
+
+        while (fileIterator.hasNext()){
+            File file = fileIterator.next();
+
+            i++;
+
+            HashMap<String, File> tempMap = renamer.addName(file, " (" + i + ")");
+
+            filesOut.putAll(tempMap);
+        }
+
+        return filesOut;
+    }
+
+    HashMap<String, File> takeFromAll(HashMap<String, File> files, String content){//usuwa wpisane z wszyskich
+
+        Collection<File> fileCollection = files.values();
+        Iterator<File> fileIterator = fileCollection.iterator();
+
+        HashMap<String, File> filesOut = new HashMap<>();
+
+        while (fileIterator.hasNext()){
+            File file = fileIterator.next();
+
+            HashMap<String, File> tempMap = renamer.takeName(file, content);
+
+            filesOut.putAll(tempMap);
+        }
+
+        return filesOut;
+    }
+
+    //TODO renameFromMask etc.
 }

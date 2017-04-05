@@ -48,7 +48,7 @@ public class MainController {
         task.setItems(FXCollections.observableList(Arrays.asList("Rename", "Add to name", "Remove from name")));
         task.getSelectionModel().select(0);
         //
-        option.setItems(FXCollections.observableList(Arrays.asList("Apply to selected", "Apply to all", "Rename with order")));
+        option.setItems(FXCollections.observableList(Arrays.asList("Apply to selected", "Apply to all", "Do with order")));
         option.getSelectionModel().select(0);
         //
         list.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -96,7 +96,9 @@ public class MainController {
     public void doClicked(ActionEvent actionEvent) {
 
         switch (option.getSelectionModel().getSelectedIndex()) {
+
             case 0:
+
                 if (!input.getText().isEmpty()) {
                     HashMap newName;
 
@@ -112,13 +114,11 @@ public class MainController {
                             }
                             break;
                         case 1:
-                            if (!clicked.contains(input.getText())) {//same^
-                                newName = renamer.addName((File) files.get(clicked), input.getText());
-                                updateListView(newName, clicked, index);
-                            }
+                            newName = renamer.addName((File) files.get(clicked), input.getText());
+                            updateListView(newName, clicked, index);
                             break;
                         case 2:
-                            if (clicked.contains(input.getText())) {//odwrotnie jeśli zawiera zazwa to co sie wpisze to wtedy tylko robi
+                            if (clicked.contains(input.getText())) {//jeśli zawiera nazwe to co sie wpisze to wtedy usuwa to
                                 newName = renamer.takeName((File) files.get(clicked), input.getText());
                                 updateListView(newName, clicked, index);
                             }
@@ -126,18 +126,46 @@ public class MainController {
                     }
                 }
                 break;
+
             case 1:
-                if (!input.getText().isEmpty()) {
-                    files = rUtilities.applyToAll(files, input.getText());//zmienia nazwe wszystkich
-                    updateListViewAll();
+
+                switch (task.getSelectionModel().getSelectedIndex()){
+                    case 0:
+                        if (!input.getText().isEmpty()) {
+                            files = rUtilities.renameAll(files, input.getText());//zmienia nazwe wszystkich
+                            updateListViewAll();
+                        }
+                        break;
+                    case 1:
+                        if (!input.getText().isEmpty()) {
+                            files = rUtilities.addToAll(files, input.getText());//dodaje wpisany tekst do wysztkich
+                            updateListViewAll();
+                        }
+                        break;
+                    case 2:
+                        if (!input.getText().isEmpty()) {
+                            files = rUtilities.takeFromAll(files, input.getText());//usuwa z każdego
+                            updateListViewAll();
+                        }
+                        break;
                 }
                 break;
+
             case 2:
-                if (!input.getText().isEmpty()) {
-                    files = rUtilities.renameOrdered(files, input.getText());//zmienia nazwe i przypisuje cyfry
-                    updateListViewAll();
+
+                switch (task.getSelectionModel().getSelectedIndex()){
+                    case 0:
+                        if (!input.getText().isEmpty()) {
+                            files = rUtilities.renameOrdered(files, input.getText());//zmienia nazwe i przypisuje cyfry
+                            updateListViewAll();
+                        }
+                        break;
+                    case 1:
+                        files = rUtilities.addOrder(files);//dodaje cyfry do nazw
+                        updateListViewAll();
+                        break;
                 }
-                break;
+                //TODO in case 2 wyłaczam z wybierania "take from name" i w case 2->case1 wybaczam textfield
         }
     }
 }
